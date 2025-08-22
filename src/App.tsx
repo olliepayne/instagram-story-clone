@@ -1,18 +1,19 @@
 import AddStoryButton from "./components/AddStoryButton"
 import AddStoryModal from "./components/AddStoryModal"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 function App() {
   const [addStoryModalIsOpen, setAddStoryModalIsOpen] = useState(false)
-  function handleAddStoryModalVisibility(show: boolean) {
-    if (show) {
-      document.addEventListener("keydown", (keydown) => {
-        if (keydown.key === "Escape") {
-          handleAddStoryModalVisibility(false)
-        }
-      })
-    }
-    setAddStoryModalIsOpen(show)
+  useEffect(() => {
+    document.addEventListener("keydown", (keydown) => {
+      if (keydown.key === "Escape") {
+        handleAddStoryModalVisibility(false)
+      }
+    })
+  })
+
+  function handleAddStoryModalVisibility(isOpen: boolean) {
+    setAddStoryModalIsOpen(isOpen)
   }
 
   return (
@@ -20,7 +21,10 @@ function App() {
       <AddStoryButton
         handleAddStoryModalVisibility={handleAddStoryModalVisibility}
       />
-      <AddStoryModal isOpen={addStoryModalIsOpen} />
+      <AddStoryModal
+        isOpen={addStoryModalIsOpen}
+        handleAddStoryModalVisibility={handleAddStoryModalVisibility}
+      />
     </div>
   )
 }
