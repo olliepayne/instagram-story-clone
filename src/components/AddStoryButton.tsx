@@ -1,16 +1,16 @@
-interface AddStoryButton {
-  handleAddStoryModalVisibility: (show: boolean) => void
+interface AddStoryButtonProps {
+  handleAddStoryModalVisibility: (isOpen: boolean) => void
 }
 
-export default function AddStoryButton({ handleAddStoryModalVisibility }: AddStoryButton) {
-  function closeAddStoryModal() {
-    handleAddStoryModalVisibility(true)
-  }
-
+export default function AddStoryButton({
+  handleAddStoryModalVisibility
+}: AddStoryButtonProps) {
   return (
     <button
       className="w-[89px] h-[89px] border-4 border-gray-900 rounded-[50%] bg-red-500 cursor-pointer"
-      onClick={closeAddStoryModal}
+      onClick={() => {
+        handleAddStoryModalVisibility(true)
+      }}
     >
       {/* open modal w/ inputs for story upload */}
       {/* Add accessibilty */}
