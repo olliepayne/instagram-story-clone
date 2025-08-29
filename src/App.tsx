@@ -1,5 +1,4 @@
 import AddStoryButton from "./components/AddStoryButton"
-import AddStoryModal from "./components/AddStoryModal"
 import { useEffect, useState } from "react"
 
 function App() {
@@ -19,10 +18,6 @@ function App() {
   return (
     <div className="py-4 px-4">
       <AddStoryButton
-        handleAddStoryModalVisibility={handleAddStoryModalVisibility}
-      />
-      <AddStoryModal
-        isOpen={addStoryModalIsOpen}
         handleAddStoryModalVisibility={handleAddStoryModalVisibility}
       />
     </div>
