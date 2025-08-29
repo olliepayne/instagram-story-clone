@@ -18,37 +18,44 @@ export default function AddStoryButton() {
   return (
     <>
       <button
-        className="w-[89px] h-[89px] border-4 border-gray-900 rounded-[50%] bg-red-500 cursor-pointer"
+        className="w-[89px] h-[89px] border-4 border-gray-900 rounded-[50%] bg-red-500 cursor-pointer text-transparent"
         onClick={() => {
           handleModalOpen(true)
         }}
       >
-        {/* open modal w/ inputs for story upload */}
-        {/* Add accessibilty */}
+        Add to your
       </button>
-      {modalOpen && <AddStoryModal handleModalOpen={handleModalOpen} />}
+      {modalOpen && <Modal handleModalOpen={handleModalOpen} />}
     </>
   )
 }
 
-interface AddStoryModalProps {
+interface ModalProps {
   handleModalOpen: (open: boolean) => void
 }
 
-function AddStoryModal({ handleModalOpen }: AddStoryModalProps) {
-  // state to hold file
+function Modal({ handleModalOpen }: ModalProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>()
-  function handleSetSelectedImage(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const fileList = event.target.files
-    if (fileList) {
-      setSelectedImage(fileList[0])
-    }
-  }
+    if (fileList && fileList.length > 0) {
+      const imageFile = fileList[0]
+      function handleImageStorage() {
+        const reader = new FileReader()
 
-  // function to upload the file to local storage
-  function handleSelectedImageUpload() {
-    // upload the image to a feed array in local storage, which is an array of storyobjects
-    // story class will contain properties for image and user
+        reader.onload = (event) => {
+          if (event.target) {
+            const imageDataURL = event.target.result as string
+            localStorage.setItem("story", imageDataURL)
+          }
+        }
+
+        reader.readAsDataURL(imageFile)
+      }
+      handleImageStorage()
+
+      // setSelectedImage(fileList[0])
+    }
   }
 
   return (
@@ -66,8 +73,8 @@ function AddStoryModal({ handleModalOpen }: AddStoryModalProps) {
         <p>Current file: {selectedImage?.name}</p>
         <input
           type="file"
-          accept="img/png, img/jpeg"
-          onChange={handleSetSelectedImage}
+          accept="image/png, image/jpeg"
+          onChange={handleImageUpload}
         />
       </div>
     </div>
