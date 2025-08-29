@@ -1,34 +1,41 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-interface AddStoryButtonProps {
-  handleAddStoryModalVisibility: (isOpen: boolean) => void
-}
+export default function AddStoryButton() {
+  const [modalOpen, setModalOpen] = useState(false)
 
-export default function AddStoryButton({
-  handleAddStoryModalVisibility
-}: AddStoryButtonProps) {
+  function handleModalOpen(open: boolean) {
+    setModalOpen(open)
+  }
+
+  useEffect(() => {
+    document.addEventListener("keydown", (keydown) => {
+      if (keydown.key === "Escape") {
+        handleModalOpen(false)
+      }
+    })
+  })
+
   return (
-    <button
-      className="w-[89px] h-[89px] border-4 border-gray-900 rounded-[50%] bg-red-500 cursor-pointer"
-      onClick={() => {
-        handleAddStoryModalVisibility(true)
-      }}
-    >
-      {/* open modal w/ inputs for story upload */}
-      {/* Add accessibilty */}
-    </button>
+    <>
+      <button
+        className="w-[89px] h-[89px] border-4 border-gray-900 rounded-[50%] bg-red-500 cursor-pointer"
+        onClick={() => {
+          handleModalOpen(true)
+        }}
+      >
+        {/* open modal w/ inputs for story upload */}
+        {/* Add accessibilty */}
+      </button>
+      {modalOpen && <AddStoryModal handleModalOpen={handleModalOpen} />}
+    </>
   )
 }
 
 interface AddStoryModalProps {
-  isOpen: boolean
-  handleAddStoryModalVisibility: (isOpen: boolean) => void
+  handleModalOpen: (open: boolean) => void
 }
 
-function AddStoryModal({
-  isOpen,
-  handleAddStoryModalVisibility
-}: AddStoryModalProps) {
+function AddStoryModal({ handleModalOpen }: AddStoryModalProps) {
   // state to hold file
   const [selectedImage, setSelectedImage] = useState<File | null>()
   function handleSetSelectedImage(event: React.ChangeEvent<HTMLInputElement>) {
@@ -44,12 +51,12 @@ function AddStoryModal({
     // story class will contain properties for image and user
   }
 
-  return isOpen ? (
+  return (
     <div className="relative">
       <button
         className="absolute top-4 right-4"
         onClick={() => {
-          handleAddStoryModalVisibility(false)
+          handleModalOpen(false)
         }}
       >
         X
@@ -64,7 +71,5 @@ function AddStoryModal({
         />
       </div>
     </div>
-  ) : (
-    <></>
   )
 }
